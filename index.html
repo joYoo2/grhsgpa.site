@@ -74,7 +74,7 @@
     }
   </style>
   <!-- PDF.js (client-only) -->
-  <script src="https://unpkg.com/pdfjs-dist@4.8.69/build/pdf.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.8.69/pdf.min.js" integrity="sha512-M9zCqAzZr6gHqfD4BblbTQ1R0QX2Wm3J6C+o7XjPzHnD0dA0t2K9+6Y9uG1tY9Ccz7mG4Z3f3u2Z8b1jQZr4Vw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 <body>
   <div class="container">
@@ -193,7 +193,7 @@
     document.addEventListener('DOMContentLoaded', () => {
       // PDF.js worker
       if (window['pdfjsLib']) {
-pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://unpkg.com/pdfjs-dist@4.8.69/build/pdf.worker.min.js';
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.8.69/pdf.worker.min.js';
       }
       if (years.length === 0) addYear();
       updateGPA();
@@ -258,7 +258,7 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://unpkg.com/pdfjs-dist@4.8.69/bu
             </div>
             <div class="year-buttons">
               ${removeBtn}
-              <button class="button primary" onclick="openPdfPicker(${y.id})">📄 Import PDF</button>
+              <label class="button primary" for="pdf-input-${y.id}">📄 Import PDF</label>
               <button class="button secondary" onclick="toggleDebug()">🔧 Toggle Debug</button>
               <input type="file" id="pdf-input-${y.id}" class="hidden" accept="application/pdf" onchange="handlePDFImport(event, ${y.id})">
             </div>
@@ -321,103 +321,40 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://unpkg.com/pdfjs-dist@4.8.69/bu
     function onDragEnd(){ draggedYearId=null; Array.from(document.querySelectorAll('.year-header')).forEach(h=>h.classList.remove('drag-over-top','drag-over-bottom')); }
 
     // ===== PDF Import =====
-    function openPdfPicker(yearId){
-      const input = byId(`pdf-input-${yearId}`);
-      if(!input){ console.warn('No file input found for year', yearId); return; }
-      input.click();
-    }
     function toggleDebug(){ byId('debug-card').classList.toggle('hidden'); }
 
     async function handlePDFImport(event, yearId){
-  try{
-    const file = event.target.files && event.target.files[0];
-    if(!file){ return; }
-
-    const arrayBuffer = await file.arrayBuffer();
-    if(!window.pdfjsLib){ alert('PDF.js failed to load. Check the browser console for errors.'); return; }
-
-    const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
-    let fullText = '';
-
-    for(let p=1;p<=pdf.numPages;p++){
-      const page = await pdf.getPage(p);
-      const content = await page.getTextContent();
-      const strings = content.items.map(i => ('str' in i ? i.str : i) || '');
-
-      // Flatten to a line, then insert newlines before course starts and after grades.
-      let pageText = strings.join(' ').replace(/\s+/g,' ').trim();
-      pageText = pageText
-        // very likely pattern: "Course Name ####-#" -> put a newline before this
-        .replace(/\b([A-Z][A-Za-z\.\/'&\-\s]{2,})\s(\d{4}-\d)\b/g, '\n$1 $2')
-        // put a newline after each grade we see to break “rows”
-        .replace(/(A\+|A-|\bA\b|B\+|B-|\bB\b|C\+|C-|\bC\b|D\+|D-|\bD\b|\bF\b)\s+(?=\d|[A-Z])/g, '$1\n')
-        // normalize code fragment spacing
-        .replace(/(\d{4}-\d+)\s+/g, '$1 ');
-
-      fullText += (p>1?'\n':'') + pageText;
-    }
-
-    // Always show what we extracted
-    const dbg = document.getElementById('pdf-debug');
-    if (dbg){
-      dbg.textContent = fullText || '[no text extracted]';
-      document.getElementById('debug-card').classList.remove('hidden');
-    }
-
-    // Primary parse (your existing logic)
-    let parsed = parseReportCard(fullText);
-
-    // Fallback parse if nothing matched: grab broad chunks like
-    // "<name> ####-# ... <many grades> ... <first decimal credits>"
-    if(!parsed.length){
-      const chunks=[];
-      const re = /([A-Za-z0-9\.\/'&\-\s]+?)\s(\d{4}-\d)\b[\s\S]{0,120}?((?:A\+|A-|A|B\+|B-|B|C\+|C-|C|D\+|D-|D|F)(?:\s+(?:A\+|A-|A|B\+|B-|B|C\+|C-|C|D\+|D-|D|F)){1,7})[\s\S]{0,60}?(\\d+\.(?:\\d{1,3}))?/g;
-      let m;
-      while((m = re.exec(fullText))){
-        const rawName = (m[1]||'').replace(/\s+/g,' ').trim();
-        const codePart = m[2];
-        const gradesBlob = m[3];
-        const decimal = m[4] ? parseFloat(m[4]) : null;
-
-        const grades = gradesBlob.match(/A\+|A-|\bA\b|B\+|B-|\bB\b|C\+|C-|\\bC\\b|D\\+|D-|\\bD\\b|F\\b/g) || [];
-        const finalGrade = grades[grades.length-1];
-        if(!finalGrade) continue;
-
-        let name = rawName;
-        let level = inferLevelFromName(name);
-        let credits = decimal || 5;
-
-        const code4 = codePart.slice(0,4);
-        if (courseCatalogByCode[code4]){
-          const cat = courseCatalogByCode[code4];
-          name = cat.name; level = cat.level; credits = cat.credits;
-        }
-        chunks.push({ code: (courseCatalog[name]?.code) || code4, name, letterGrade: finalGrade, credits, level });
+      const file = event.target.files && event.target.files[0];
+      if(!file){ return; }
+      const arrayBuffer = await file.arrayBuffer();
+      const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+      let fullText = '';
+      for(let p=1;p<=pdf.numPages;p++){
+        const page = await pdf.getPage(p);
+        const content = await page.getTextContent();
+        const strings = content.items.map(i=>('str' in i ? i.str : i) || '');
+        // Join with spaces, then restore some line breaks based on obvious headings
+        let pageText = strings.join(' ').replace(/\s+/g,' ').trim();
+        // Heuristic: split after course rows by looking for credit totals like "7.000" or a trailing letter grade
+        pageText = pageText
+          .replace(/(A\+|A-|\bA\b|B\+|B-|\bB\b|C\+|C-|\bC\b|D\+|D-|\bD\b|\bF\b)\s+(?=\d|[A-Z])/g, '$1\n')
+          .replace(/(\d{4}-\d+)\s+/g, '$1 ');
+        fullText += (p>1?'\n':'') + pageText;
       }
-      parsed = chunks;
+      // Show debug
+      const dbg = byId('pdf-debug'); if (dbg){ dbg.textContent = fullText; byId('debug-card').classList.remove('hidden'); }
+
+      // Parse and apply
+      const parsed = parseReportCard(fullText);
+      if(!parsed.length){ alert('No courses found in the PDF text. Toggle Debug to inspect what was extracted.'); return; }
+      const y = years.find(y=>y.id===yearId); if(!y) return;
+      parsed.forEach(p=>{
+        y.courses.push({ id: Date.now()+Math.random(), code: p.code||'', name: p.name, letterGrade: p.letterGrade, credits: p.credits, level: p.level, isCustom: !courseCatalog[p.name] });
+      });
+      renderYears(); updateGPA();
+      // reset the input so you can pick the same file again if needed
+      event.target.value = '';
     }
-
-    if(!parsed.length){
-      alert('I could not find any course rows in this PDF. Open the Debug panel to see the raw text we got.');
-      return;
-    }
-
-    const y = years.find(y=>y.id===yearId); if(!y) return;
-    parsed.forEach(p=>{
-      y.courses.push({ id: Date.now()+Math.random(), code: p.code||'', name: p.name, letterGrade: p.letterGrade, credits: p.credits, level: p.level, isCustom: !courseCatalog[p.name] });
-    });
-    renderYears();
-    updateGPA();
-
-    // allow re-upload of the same file
-    event.target.value = '';
-
-  } catch(err){
-    console.error('PDF import failed:', err);
-    alert('PDF import failed. Open the console (F12) and tell me the red error message.');
-  }
-}
-
 
     function inferLevelFromName(name){
       const n = (name||'').toLowerCase();
