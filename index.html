@@ -1,98 +1,90 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>GRHS GPA Calculator</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background-color: #f9fafb; min-height: 100vh; padding: 0.5rem; }
-        .container { max-width: 1400px; margin: 0 auto; }
-        .header { text-align: center; margin-bottom: 1rem; }
-        .header h1 { font-size: 1.5rem; font-weight: bold; color: #1f2937; margin-bottom: 0.25rem; }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GRHS GPA Calculator — PDF Import</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f9fafb;min-height:100vh;padding:.5rem}
+    .container{max-width:1400px;margin:0 auto}
+    .header{text-align:center;margin-bottom:1rem}
+    .header h1{font-size:1.5rem;font-weight:700;color:#1f2937;margin-bottom:.25rem}
 
-        /* Tabs */
-        .tab-navigation { display: flex; background: white; border-radius: 0.375rem; box-shadow: 0 1px 2px rgba(0,0,0,0.1); overflow: hidden; margin-bottom: 1rem; }
-        .tab-button { flex: 1; padding: 0.5rem 0.75rem; border: none; background: white; color: #6b7280; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 0.25rem; font-size: 0.875rem; }
-        .tab-button:hover { background: #f9fafb; }
-        .tab-button.active { background: #3b82f6; color: white; }
+    .tab-navigation{display:flex;background:#fff;border-radius:.375rem;box-shadow:0 1px 2px rgba(0,0,0,.1);overflow:hidden;margin-bottom:1rem}
+    .tab-button{flex:1;padding:.5rem .75rem;border:none;background:#fff;color:#6b7280;cursor:pointer;transition:.2s;display:flex;align-items:center;justify-content:center;gap:.25rem;font-size:.875rem}
+    .tab-button:hover{background:#f9fafb}
+    .tab-button.active{background:#3b82f6;color:#fff}
 
-        /* Cards, buttons, inputs */
-        .card { background: white; border-radius: 0.375rem; box-shadow: 0 1px 2px rgba(0,0,0,0.1); padding: 0.75rem; margin-bottom: 0.75rem; }
-        .card h2 { font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem; color: #1f2937; }
-        .card h3 { font-size: 0.875rem; font-weight: 600; margin-bottom: 0.5rem; color: #1f2937; }
-        .gpa-display { display:flex; justify-content:center; gap:1rem; margin-bottom:0.5rem; }
-        .gpa-box { text-align:center; padding:0.75rem 1.5rem; border-radius:0.375rem; background:#dcfce7; flex:1; max-width:200px; }
-        .gpa-box.unweighted { background:#dbeafe; }
-        .gpa-value { font-size:1.5rem; font-weight:bold; margin-bottom:0.125rem; }
-        .gpa-value.weighted { color:#16a34a; }
-        .gpa-value.unweighted { color:#2563eb; }
-        .gpa-label { font-size:0.75rem; color:#6b7280; }
-        .button { padding:0.25rem 0.5rem; border:none; border-radius:0.25rem; cursor:pointer; font-size:0.75rem; transition:all 0.2s; display:inline-flex; align-items:center; gap:0.25rem; }
-        .button.primary { background:#3b82f6; color:#fff; }
-        .button.primary:hover { background:#2563eb; }
-        .button.success { background:#10b981; color:#fff; }
-        .button.success:hover { background:#059669; }
-        .button.secondary { background:#6b7280; color:#fff; }
-        .button.secondary:hover { background:#4b5563; }
-        .button.danger { background:transparent; color:#ef4444; padding:0.125rem 0.25rem; font-size:0.875rem; font-weight:bold; min-width:18px; height:18px; justify-content:center; border:none; border-radius:0; }
-        .button.danger:hover { color:#dc2626; background:rgba(239,68,68,0.1); }
-        .form-group { margin-bottom:0.25rem; }
-        .form-label { display:block; font-size:0.7rem; font-weight:500; color:#374151; margin-bottom:0.125rem; }
-        .form-input, .form-select { width:100%; padding:0.25rem 0.375rem; border:1px solid #d1d5db; border-radius:0.25rem; font-size:0.75rem; background:#fff; }
-        .form-input:focus, .form-select:focus { outline:none; border-color:#3b82f6; box-shadow:0 0 0 2px rgba(59,130,246,0.1); }
+    .card{background:#fff;border-radius:.375rem;box-shadow:0 1px 2px rgba(0,0,0,.1);padding:.75rem;margin-bottom:.75rem}
+    .card h2{font-size:1rem;font-weight:600;margin-bottom:.5rem;color:#1f2937}
+    .card h3{font-size:.875rem;font-weight:600;margin-bottom:.5rem;color:#1f2937}
+    .gpa-display{display:flex;justify-content:center;gap:1rem;margin-bottom:.5rem}
+    .gpa-box{text-align:center;padding:.75rem 1.5rem;border-radius:.375rem;background:#dcfce7;flex:1;max-width:200px}
+    .gpa-box.unweighted{background:#dbeafe}
+    .gpa-value{font-size:1.5rem;font-weight:700;margin-bottom:.125rem}
+    .gpa-value.weighted{color:#16a34a}
+    .gpa-value.unweighted{color:#2563eb}
+    .gpa-label{font-size:.75rem;color:#6b7280}
+    .button{padding:.25rem .5rem;border:none;border-radius:.25rem;cursor:pointer;font-size:.75rem;transition:.2s;display:inline-flex;align-items:center;gap:.25rem}
+    .button.primary{background:#3b82f6;color:#fff}
+    .button.primary:hover{background:#2563eb}
+    .button.success{background:#10b981;color:#fff}
+    .button.success:hover{background:#059669}
+    .button.secondary{background:#6b7280;color:#fff}
+    .button.secondary:hover{background:#4b5563}
+    .button.danger{background:transparent;color:#ef4444;padding:.125rem .25rem;font-size:.875rem;font-weight:700;min-width:18px;height:18px;justify-content:center;border:none;border-radius:0}
+    .button.danger:hover{color:#dc2626;background:rgba(239,68,68,.1)}
+    .form-group{margin-bottom:.25rem}
+    .form-label{display:block;font-size:.7rem;font-weight:500;color:#374151;margin-bottom:.125rem}
+    .form-input,.form-select{width:100%;padding:.25rem .375rem;border:1px solid #d1d5db;border-radius:.25rem;font-size:.75rem;background:#fff}
+    .form-input:focus,.form-select:focus{outline:none;border-color:#3b82f6;box-shadow:0 0 0 2px rgba(59,130,246,.1)}
 
-        /* Years & courses (no visible code column) */
-        .course-grid { display:grid; grid-template-columns:2fr 0.8fr 0.8fr 0.8fr auto; gap:0.375rem; align-items:end; padding:0.375rem; border:1px solid #e5e7eb; border-radius:0.25rem; margin-bottom:0.1rem; }
-        .course-header { display:grid; grid-template-columns:2fr 0.8fr 0.8fr 0.8fr auto; gap:0.375rem; font-weight:600; font-size:0.75rem; color:#6b7280; padding:0.375rem; border:1px solid #e5e7eb; border-bottom:none; border-radius:0.25rem 0.25rem 0 0; background:#f3f4f6; }
-        .years-grid { display:grid; grid-template-columns:1fr 1fr; gap:0.75rem; margin-bottom:0.75rem; }
-        .year-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem; padding-bottom:0.375rem; border-bottom:1px solid #e5e7eb; cursor:grab; }
-        .year-info { display:flex; flex-direction:column; gap:0.25rem; }
-        .year-name { font-size:0.875rem; font-weight:600; border:none; background:transparent; outline:none; color:#1f2937; padding:0; margin:0; }
-        .year-gpa { font-size:0.7rem; color:#6b7280; font-weight:normal; }
-        .year-buttons { display:flex; flex-direction:column; gap:0.25rem; align-items:flex-end; }
-        .empty-state { text-align:center; padding:1rem; color:#6b7280; font-size:0.75rem; }
-        .data-management { display:flex; gap:0.5rem; align-items:center; }
-        .file-input { display:none; }
-        .mass-grade-section { margin-top:0.5rem; padding:0.5rem; background:#f9fafb; border-radius:0.25rem; border:1px solid #e5e7eb; }
-        .mass-grade-textarea { width:100%; min-height:60px; padding:0.375rem; border:1px solid #d1d5db; border-radius:0.25rem; font-size:0.75rem; font-family:monospace; resize:vertical; }
-        .course-actions { margin-top:0.5rem; display:flex; gap:0.375rem; align-items:center; }
-        .hidden { display:none; }
+    .course-grid{display:grid;grid-template-columns:2fr .8fr .8fr .8fr auto;gap:.375rem;align-items:end;padding:.375rem;border:1px solid #e5e7eb;border-radius:.25rem;margin-bottom:.1rem}
+    .course-header{display:grid;grid-template-columns:2fr .8fr .8fr .8fr auto;gap:.375rem;font-weight:600;font-size:.75rem;color:#6b7280;padding:.375rem;border:1px solid #e5e7eb;border-bottom:none;border-radius:.25rem .25rem 0 0;background:#f3f4f6}
+    .years-grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:.75rem}
+    .year-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem;padding-bottom:.375rem;border-bottom:1px solid #e5e7eb;cursor:grab}
+    .year-info{display:flex;flex-direction:column;gap:.25rem}
+    .year-name{font-size:.875rem;font-weight:600;border:none;background:transparent;outline:none;color:#1f2937;padding:0;margin:0}
+    .year-gpa{font-size:.7rem;color:#6b7280;font-weight:400}
+    .year-buttons{display:flex;flex-direction:column;gap:.25rem;align-items:flex-end}
+    .empty-state{text-align:center;padding:1rem;color:#6b7280;font-size:.75rem}
+    .hidden{display:none}
 
-        /* Drag feedback */
-        .drag-over-top { box-shadow: inset 0 3px 0 0 #3b82f6; }
-        .drag-over-bottom { box-shadow: inset 0 -3px 0 0 #3b82f6; }
+    .drag-over-top{box-shadow:inset 0 3px 0 0 #3b82f6}
+    .drag-over-bottom{box-shadow:inset 0 -3px 0 0 #3b82f6}
 
-        /* Custom dropdown */
-        .custom-dropdown { position:relative; width:100%; }
-        .custom-dropdown-input { width:100%; padding:0.25rem 0.375rem; border:1px solid #d1d5db; border-radius:0.25rem; font-size:0.75rem; background:#fff; cursor:text; }
-        .custom-dropdown-input:focus { outline:none; border-color:#3b82f6; box-shadow:0 0 0 2px rgba(59,130,246,0.1); }
-        .custom-dropdown-list { position:absolute; top:100%; left:0; right:0; background:#fff; border:1px solid #d1d5db; border-top:none; border-radius:0 0 0.25rem 0.25rem; max-height:240px; overflow-y:auto; z-index:1000; box-shadow:0 4px 6px -1px rgba(0,0,0,0.1); }
-        .custom-dropdown-item { padding:0.375rem 0.5rem; cursor:pointer; font-size:0.75rem; border-bottom:1px solid #f3f4f6; }
-        .custom-dropdown-item:hover, .custom-dropdown-item.highlighted { background:#f9fafb; }
-        .custom-dropdown-item:last-child { border-bottom:none; }
-        .no-results { padding:0.375rem 0.5rem; color:#6b7280; font-style:italic; font-size:0.75rem; }
+    .custom-dropdown{position:relative;width:100%}
+    .custom-dropdown-input{width:100%;padding:.25rem .375rem;border:1px solid #d1d5db;border-radius:.25rem;font-size:.75rem;background:#fff;cursor:text}
+    .custom-dropdown-input:focus{outline:none;border-color:#3b82f6;box-shadow:0 0 0 2px rgba(59,130,246,.1)}
+    .custom-dropdown-list{position:absolute;top:100%;left:0;right:0;background:#fff;border:1px solid #d1d5db;border-top:none;border-radius:0 0 .25rem .25rem;max-height:240px;overflow-y:auto;z-index:1000;box-shadow:0 4px 6px -1px rgba(0,0,0,.1)}
+    .custom-dropdown-item{padding:.375rem .5rem;cursor:pointer;font-size:.75rem;border-bottom:1px solid #f3f4f6}
+    .custom-dropdown-item:hover,.custom-dropdown-item.highlighted{background:#f9fafb}
+    .custom-dropdown-item:last-child{border-bottom:none}
+    .no-results{padding:.375rem .5rem;color:#6b7280;font-style:italic;font-size:.75rem}
 
-        @media (max-width:768px){
-          .years-grid { grid-template-columns:1fr; }
-          .course-grid { grid-template-columns:1fr; gap:0.25rem; }
-          .year-header { flex-direction:column; gap:0.5rem; align-items:stretch; }
-          .year-buttons { flex-direction:row; justify-content:center; }
-          .gpa-display { flex-direction:column; align-items:center; }
-        }
-    </style>
+    .debug{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,'Liberation Mono','Courier New',monospace;font-size:.72rem;white-space:pre-wrap;background:#f3f4f6;border:1px dashed #cbd5e1;border-radius:.375rem;padding:.5rem}
+
+    @media (max-width:768px){
+      .years-grid{grid-template-columns:1fr}
+      .course-grid{grid-template-columns:1fr;gap:.25rem}
+      .year-header{flex-direction:column;gap:.5rem;align-items:stretch}
+      .year-buttons{flex-direction:row;justify-content:center}
+      .gpa-display{flex-direction:column;align-items:center}
+    }
+  </style>
+  <!-- PDF.js (client-only) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.8.69/pdf.min.js" integrity="sha512-M9zCqAzZr6gHqfD4BblbTQ1R0QX2Wm3J6C+o7XjPzHnD0dA0t2K9+6Y9uG1tY9Ccz7mG4Z3f3u2Z8b1jQZr4Vw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 <body>
   <div class="container">
     <div class="header"><h1>GRHS GPA Calculator</h1></div>
 
-    <!-- Tabs -->
     <div class="tab-navigation">
       <button class="tab-button active" onclick="switchTab('gpa')" id="gpa-tab">📊 GPA Calculator</button>
       <button class="tab-button" onclick="switchTab('grade')" id="grade-tab">📖 Grade Calculator</button>
     </div>
 
-    <!-- GPA CONTENT -->
     <div id="gpa-content">
       <div class="card">
         <h2>Current GPA</h2>
@@ -102,29 +94,26 @@
         </div>
       </div>
 
-      <!-- Export/Import stays at top -->
       <div class="card">
         <h3>Data Management</h3>
-        <div class="data-management">
+        <div style="display:flex;gap:.5rem;align-items:center;flex-wrap:wrap">
           <button class="button primary" onclick="exportData()">💾 Export Data</button>
           <label class="button success" for="import-file">📁 Import Data</label>
-          <input type="file" id="import-file" class="file-input" accept=".json" onchange="importData(event)">
+          <input type="file" id="import-file" class="hidden" accept=".json" onchange="importData(event)">
         </div>
       </div>
 
-      <!-- Years -->
       <div class="years-grid" id="years-container"></div>
       <div class="add-year-section"><button class="button success" onclick="addYear()">➕ Add New Year</button></div>
     </div>
 
-    <!-- GRADE CONTENT -->
     <div id="grade-content" class="hidden">
       <div class="card">
         <h2>Grade Calculator</h2>
-        <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:0.5rem; margin-bottom:0.75rem;">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.5rem;margin-bottom:.75rem">
           <div class="form-group">
             <label class="form-label">Course Type</label>
-            <div style="display:flex; flex-direction:column; gap:0.25rem;">
+            <div style="display:flex;flex-direction:column;gap:.25rem">
               <label class="checkbox-item"><input type="checkbox" id="is-ap" onchange="updateGradeInputs()"> AP Course (No Final Exam)</label>
               <label class="checkbox-item"><input type="checkbox" id="is-semester" onchange="updateGradeInputs()"> Semester Course (2 Marking Periods)</label>
             </div>
@@ -132,217 +121,65 @@
         </div>
         <div class="form-group">
           <label class="form-label">Marking Period Grades (0-100)</label>
-          <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(100px,1fr)); gap:0.5rem; margin-bottom:0.75rem;">
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:.5rem;margin-bottom:.75rem">
             <div class="form-group"><label class="form-label">MP 1</label><input type="number" id="mp1" class="form-input" min="0" max="100" oninput="calculateFinalGrade()"></div>
             <div class="form-group"><label class="form-label">MP 2</label><input type="number" id="mp2" class="form-input" min="0" max="100" oninput="calculateFinalGrade()"></div>
             <div class="form-group" id="mp3-container"><label class="form-label">MP 3</label><input type="number" id="mp3" class="form-input" min="0" max="100" oninput="calculateFinalGrade()"></div>
             <div class="form-group" id="mp4-container"><label class="form-label">MP 4</label><input type="number" id="mp4" class="form-input" min="0" max="100" oninput="calculateFinalGrade()"></div>
           </div>
         </div>
-        <div class="form-group" id="final-exam-container"><label class="form-label">Final Exam Grade (10%)</label><input type="number" id="final-exam" class="form-input" min="0" max="100" style="max-width:300px;" oninput="calculateFinalGrade()"></div>
+        <div class="form-group" id="final-exam-container"><label class="form-label">Final Exam Grade (10%)</label><input type="number" id="final-exam" class="form-input" min="0" max="100" style="max-width:300px" oninput="calculateFinalGrade()"></div>
         <div id="grade-results" class="hidden">
-          <div class="card" style="margin:0;">
+          <div class="card" style="margin:0">
             <h3>Final Course Grade</h3>
-            <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:0.5rem;">
-              <div><div class="form-label">Grade Points</div><div class="gpa-value unweighted" id="final-points" style="font-size:1rem;">--</div></div>
-              <div><div class="form-label">Letter Grade</div><div class="gpa-value weighted" id="final-letter" style="font-size:1rem;">--</div></div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:.5rem">
+              <div><div class="form-label">Grade Points</div><div class="gpa-value unweighted" id="final-points" style="font-size:1rem">--</div></div>
+              <div><div class="form-label">Letter Grade</div><div class="gpa-value weighted" id="final-letter" style="font-size:1rem">--</div></div>
             </div>
           </div>
         </div>
       </div>
     </div>
+
+    <div id="debug-card" class="card hidden">
+      <h3>PDF Text (for debugging)</h3>
+      <p class="form-label">This shows exactly what the PDF reader extracted. Toggle from the year card.</p>
+      <div id="pdf-debug" class="debug"></div>
+    </div>
   </div>
 
   <script>
-    // ===== Course catalog with internal 4-digit codes (hidden from UI) =====
+    // ===== Course catalog (same structure you already use) =====
     const courseCatalog = {};
     Object.assign(courseCatalog, {
-        // ===================== ENGLISH =====================
-        'Adv. English 10': { code: '1412', credits: 5, level: 'ADV', semester: false, subject: 'English' },
-        'Adv. Journalism II': { code: '1833', credits: 5, level: 'CP', semester: false, subject: 'English' },
-        'Adv. Journalism III': { code: '1834', credits: 5, level: 'CP', semester: false, subject: 'English' },
-        'Adv. Journalism IV': { code: '1852', credits: 5, level: 'H', semester: false, subject: 'English' },
-        'AP English Lang/ Comp': { code: '1510', credits: 5, level: 'AP', semester: false, subject: 'English' },
-        'AP English Lit/ Comp': { code: '1610', credits: 5, level: 'AP', semester: false, subject: 'English' },
-        'Creative Writing A': { code: '1843', credits: 2.5, level: 'CP', semester: true, subject: 'English' },
-        'Creative Writing B': { code: '1853', credits: 2.5, level: 'CP', semester: true, subject: 'English' },
-        'English 9': { code: '1313', credits: 5, level: 'CP', semester: false, subject: 'English' },
-        'English 10': { code: '1413', credits: 5, level: 'CP', semester: false, subject: 'English' },
-        'English 11': { code: '1513', credits: 5, level: 'CP', semester: false, subject: 'English' },
-        'English 12 - Contemporary Fiction': { code: '1643', credits: 5, level: 'CP', semester: false, subject: 'English' },
-        'Hon. Eng. 12 - Contemp. Fiction': { code: '1641', credits: 5, level: 'H', semester: false, subject: 'English' },
-        'Honors English 11': { code: '1511', credits: 5, level: 'H', semester: false, subject: 'English' },
-        'Honors Journalism IV': { code: '1835', credits: 5, level: 'H', semester: false, subject: 'English' },
-        'Intro. To Documentary Film': { code: '2733', credits: 2.5, level: 'CP', semester: true, subject: 'English' },
-        'Journalism I': { code: '1832', credits: 2.5, level: 'CP', semester: true, subject: 'English' },
-        'Literature & Social Justice': { code: '1893', credits: 5, level: 'CP', semester: false, subject: 'English' },
-        'Public Speaking': { code: '1353', credits: 2.5, level: 'CP', semester: true, subject: 'English' },
-        'The Graphic Novel': { code: '1673', credits: 2.5, level: 'CP', semester: true, subject: 'English' },
-        'Writers Workshop A': { code: '1863', credits: 2.5, level: 'CP', semester: true, subject: 'English' },
-        'Writers Workshop B': { code: '1873', credits: 2.5, level: 'CP', semester: true, subject: 'English' },
-
-        // ===================== MATH =====================
-        'Adv. Math Analysis/Appl.': { code: '3822', credits: 5, level: 'ADV', semester: false, subject: 'Math' },
-        'Advanced Algebra II': { code: '3612', credits: 5, level: 'ADV', semester: false, subject: 'Math' },
-        'Advanced Geometry': { code: '3451', credits: 5, level: 'ADV', semester: false, subject: 'Math' },
-        'Algebra I': { code: '3393', credits: 5, level: 'CP', semester: false, subject: 'Math' },
-        'Algebra II': { code: '3613', credits: 5, level: 'CP', semester: false, subject: 'Math' },
-        'AP Calculus AB': { code: '3840', credits: 5, level: 'AP', semester: false, subject: 'Math' },
-        'AP Calculus BC': { code: '3830', credits: 5, level: 'AP', semester: false, subject: 'Math' },
-        'AP Pre Calculus': { code: '3841', credits: 5, level: 'AP', semester: false, subject: 'Math' },
-        'AP Statistics': { code: '3900', credits: 5, level: 'AP', semester: false, subject: 'Math' },
-        'Discrete Mathematics': { code: '3753', credits: 5, level: 'CP', semester: false, subject: 'Math' },
-        'Geometry': { code: '3453', credits: 5, level: 'CP', semester: false, subject: 'Math' },
-        'Honors Algebra III': { code: '3802', credits: 5, level: 'CP', semester: false, subject: 'Math' },
-        'Honors Calculus': { code: '3801', credits: 5, level: 'H', semester: false, subject: 'Math' },
-        'Honors Pre-Calculus': { code: '3716', credits: 5, level: 'H', semester: false, subject: 'Math' },
-        'Pre-Calculus': { code: '3713', credits: 5, level: 'CP', semester: false, subject: 'Math' },
-        'Statistical Reasoning in Sports': { code: '3622', credits: 5, level: 'CP', semester: false, subject: 'Math' },
-
-        // ===================== SCIENCE =====================
-        'Advanced Biology': { code: '5452', credits: 6, level: 'CP', semester: false, subject: 'Science' },
-        'AP Biology': { code: '5450', credits: 7, level: 'AP', semester: false, subject: 'Science' },
-        'AP Chemistry': { code: '5530', credits: 7, level: 'AP', semester: false, subject: 'Science' },
-        'AP Env. Science': { code: '5800', credits: 7, level: 'AP', semester: false, subject: 'Science' },
-        'AP Physics 1': { code: '5730', credits: 7, level: 'AP', semester: false, subject: 'Science' },
-        'AP Physics 2': { code: '5750', credits: 7, level: 'AP', semester: false, subject: 'Science' },
-        'AP Physics C': { code: '5740', credits: 7, level: 'AP', semester: false, subject: 'Science' },
-        'Biology': { code: '5453', credits: 6, level: 'CP', semester: false, subject: 'Science' },
-        'Chemistry': { code: '5533', credits: 6, level: 'CP', semester: false, subject: 'Science' },
-        'Env. Science': { code: '5803', credits: 6, level: 'CP', semester: false, subject: 'Science' },
-        'Forensic Science': { code: '5806', credits: 6, level: 'CP', semester: false, subject: 'Science' },
-        'Honors Chemistry': { code: '5531', credits: 6, level: 'H', semester: false, subject: 'Science' },
-        'Physics': { code: '5732', credits: 6, level: 'CP', semester: false, subject: 'Science' },
-
-        // ===================== SOCIAL STUDIES =====================
-        'AP European History': { code: '2810', credits: 5, level: 'AP', semester: false, subject: 'Social Studies' },
-        'AP Govt. & Politics: US': { code: '2800', credits: 5, level: 'AP', semester: false, subject: 'Social Studies' },
-        'AP Human Geography': { code: '2820', credits: 5, level: 'AP', semester: false, subject: 'Social Studies' },
-        'AP Macroeconomics': { code: '8862', credits: 5, level: 'AP', semester: false, subject: 'Social Studies' },
-        'AP Microeconomics': { code: '8861', credits: 5, level: 'AP', semester: false, subject: 'Social Studies' },
-        'AP Psychology': { code: '2660', credits: 5, level: 'AP', semester: false, subject: 'Social Studies' },
-        'AP US History': { code: '2500', credits: 5, level: 'AP', semester: false, subject: 'Social Studies' },
-        'AP World History': { code: '2300', credits: 5, level: 'AP', semester: false, subject: 'Social Studies' },
-        'Early Childhood Education': { code: '2401', credits: 5, level: 'CP', semester: false, subject: 'Social Studies' },
-        'Economics': { code: '8807', credits: 2.5, level: 'CP', semester: true, subject: 'Social Studies' },
-        'Holocaust Genocide and Social Justice': { code: '2751', credits: 5, level: 'CP', semester: false, subject: 'Social Studies' },
-        'Investing': { code: '8823', credits: 2.5, level: 'CP', semester: true, subject: 'Social Studies' },
-        'Intro. To Human Behavior': { code: '2673', credits: 5, level: 'CP', semester: false, subject: 'Social Studies' },
-        'Social Justice': { code: '2751', credits: 5, level: 'CP', semester: false, subject: 'Social Studies' },
-        'US Constitutional Law': { code: '2743', credits: 5, level: 'CP', semester: false, subject: 'Social Studies' },
-        'US History I': { code: '2403', credits: 5, level: 'CP', semester: false, subject: 'Social Studies' },
-        'US History II': { code: '2503', credits: 5, level: 'CP', semester: false, subject: 'Social Studies' },
-
-        // ===================== WORLD LANGUAGE =====================
-        'AP French': { code: '4450', credits: 5, level: 'AP', semester: false, subject: 'World Language' },
-        'AP Latin: Caesar & Vergil': { code: '4650', credits: 5, level: 'AP', semester: false, subject: 'World Language' },
-        'AP Spanish': { code: '4750', credits: 5, level: 'AP', semester: false, subject: 'World Language' },
-        'Conversational Spanish A': { code: '4712', credits: 5, level: 'CP', semester: false, subject: 'World Language' },
-        'French I': { code: '4413', credits: 5, level: 'CP', semester: false, subject: 'World Language' },
-        'French II': { code: '4423', credits: 5, level: 'CP', semester: false, subject: 'World Language' },
-        'French III': { code: '4433', credits: 5, level: 'CP', semester: false, subject: 'World Language' },
-        'Honors French III': { code: '4441', credits: 5, level: 'H', semester: false, subject: 'World Language' },
-        'Honors French IV': { code: '4440', credits: 5, level: 'H', semester: false, subject: 'World Language' },
-        'Honors Latin III': { code: '4631', credits: 5, level: 'H', semester: false, subject: 'World Language' },
-        'Honors Latin IV': { code: '4641', credits: 5, level: 'H', semester: false, subject: 'World Language' },
-        'Honors Mandarin Chinese IV': { code: '4943', credits: 5, level: 'H', semester: false, subject: 'World Language' },
-        'Honors Spanish II': { code: '4721', credits: 5, level: 'H', semester: false, subject: 'World Language' },
-        'Honors Spanish III': { code: '4731', credits: 5, level: 'H', semester: false, subject: 'World Language' },
-        'Honors Spanish IV': { code: '4741', credits: 5, level: 'H', semester: false, subject: 'World Language' },
-        'Mandarin Chinese I': { code: '4913', credits: 5, level: 'CP', semester: false, subject: 'World Language' },
-        'Mandarin Chinese II': { code: '4923', credits: 5, level: 'CP', semester: false, subject: 'World Language' },
-        'Mandarin Chinese III': { code: '4933', credits: 5, level: 'CP', semester: false, subject: 'World Language' },
-        'Spanish I': { code: '4713', credits: 5, level: 'CP', semester: false, subject: 'World Language' },
-        'Spanish II': { code: '4723', credits: 5, level: 'CP', semester: false, subject: 'World Language' },
-        'Spanish II - Fundamentals': { code: '4724', credits: 5, level: 'CP', semester: false, subject: 'World Language' },
-        'Spanish III': { code: '4733', credits: 5, level: 'CP', semester: false, subject: 'World Language' },
-        'Spanish IV': { code: '4743', credits: 5, level: 'CP', semester: false, subject: 'World Language' },
-
-        // ===================== FINE ARTS =====================
-        'Adv. Sculpture Ceramics I': { code: '8022', credits: 2.5, level: 'CP', semester: true, subject: 'Fine Arts' },
-        'Art History': { code: '8173', credits: 2.5, level: 'CP', semester: true, subject: 'Fine Arts' },
-        'Art Major I': { code: '8113', credits: 5, level: 'H', semester: false, subject: 'Fine Arts' },
-        'Art Major II': { code: '8123', credits: 5, level: 'CP', semester: false, subject: 'Fine Arts' },
-        'Basic Art & Design': { code: '8003', credits: 2.5, level: 'CP', semester: true, subject: 'Fine Arts' },
-        'Concert Band': { code: '8923', credits: 5, level: 'CP', semester: false, subject: 'Fine Arts' },
-        'Concert Choir - Full Year or S1': { code: '8703', credits: 5, level: 'CP', semester: false, subject: 'Fine Arts' },
-        'Drawing & Painting': { code: '8013', credits: 2.5, level: 'CP', semester: true, subject: 'Fine Arts' },
-        'Graphic Design': { code: '8153', credits: 2.5, level: 'CP', semester: true, subject: 'Fine Arts' },
-        'Honors Art Major III': { code: '8131', credits: 5, level: 'H', semester: false, subject: 'Fine Arts' },
-        'Honors Concert Band': { code: '8931', credits: 5, level: 'H', semester: false, subject: 'Fine Arts' },
-        'Honors Concert Choir': { code: '8701', credits: 5, level: 'H', semester: false, subject: 'Fine Arts' },
-        'Honors Digital Photography': { code: '8231', credits: 2.5, level: 'H', semester: true, subject: 'Fine Arts' },
-        'Honors Orchestra': { code: '8928', credits: 5, level: 'H', semester: false, subject: 'Fine Arts' },
-        'Interior Design': { code: '8033', credits: 2.5, level: 'CP', semester: true, subject: 'Fine Arts' },
-        'Math Theory I': { code: '8513', credits: 2.5, level: 'CP', semester: true, subject: 'Fine Arts' },
-        'Math Theory II': { code: '8523', credits: 2.5, level: 'CP', semester: true, subject: 'Fine Arts' },
-        'Media Arts': { code: '8161', credits: 5, level: 'CP', semester: false, subject: 'Fine Arts' },
-        'Music Production I': { code: '8413', credits: 2.5, level: 'CP', semester: true, subject: 'Fine Arts' },
-        'Music Production II': { code: '8415', credits: 2.5, level: 'CP', semester: true, subject: 'Fine Arts' },
-        'Music Production III': { code: '8417', credits: 2.5, level: 'CP', semester: true, subject: 'Fine Arts' },
-        'Music Production IV': { code: '8419', credits: 2.5, level: 'CP', semester: true, subject: 'Fine Arts' },
-        'Photo I - Introduction to Digital Photography': { code: '8213', credits: 2.5, level: 'CP', semester: true, subject: 'Fine Arts' },
-        'Photo II': { code: '8223', credits: 2.5, level: 'CP', semester: true, subject: 'Fine Arts' },
-        'Photo III': { code: '8233', credits: 2.5, level: 'CP', semester: true, subject: 'Fine Arts' },
-        'Sculpture - Ceramics I': { code: '8023', credits: 2.5, level: 'CP', semester: true, subject: 'Fine Arts' },
-        'Theatre Arts 1-A': { code: '1790', credits: 2.5, level: 'CP', semester: true, subject: 'Fine Arts' },
-        'Theatre Arts 1-B': { code: '1791', credits: 2.5, level: 'CP', semester: true, subject: 'Fine Arts' },
-        'Theatre Arts II': { code: '1792', credits: 5, level: 'CP', semester: false, subject: 'Fine Arts' },
-        'Theatre Arts III': { code: '1793', credits: 5, level: 'CP', semester: false, subject: 'Fine Arts' },
-        'Theatre Arts IV': { code: '1794', credits: 5, level: 'H', semester: false, subject: 'Fine Arts' },
-
-        // ===================== PHYSICAL EDUCATION =====================
-        'Fitness Center (F)': { code: '6703', credits: 2.5, level: 'CP', semester: true, subject: 'Physical Education' },
-        'Fitness Center (S)': { code: '6704', credits: 2.5, level: 'CP', semester: true, subject: 'Physical Education' },
-        'Health: Coping Skills 9': { code: '6313', credits: 2.5, level: 'CP', semester: true, subject: 'Physical Education' },
-        'Health: Drivers Ed. 10': { code: '6413', credits: 2.5, level: 'CP', semester: true, subject: 'Physical Education' },
-        'Health: Family & Relationships': { code: '6613', credits: 2.5, level: 'CP', semester: true, subject: 'Physical Education' },
-        'Health:Diseases & Prevention 11': { code: '6513', credits: 2.5, level: 'CP', semester: true, subject: 'Physical Education' },
-        'Physical Ed. 11': { code: '6503', credits: 2.5, level: 'CP', semester: true, subject: 'Physical Education' },
-        'Physical Ed. 12': { code: '6603', credits: 2.5, level: 'CP', semester: true, subject: 'Physical Education' },
-        'Physical Education 10': { code: '6403', credits: 2.5, level: 'CP', semester: true, subject: 'Physical Education' },
-        'Physical Education 9': { code: '6303', credits: 2.5, level: 'CP', semester: true, subject: 'Physical Education' },
-
-        // ===================== ELECTIVE =====================
-        'Accounting': { code: '8883', credits: 5, level: 'CP', semester: false, subject: 'Elective' },
-        'AP Computer Science': { code: '3920', credits: 5, level: 'AP', semester: false, subject: 'Elective' },
-        'AP Comp Sci Principles': { code: '3921', credits: 5, level: 'AP', semester: false, subject: 'Elective' },
-        'Comp Prog. with Python': { code: '3914', credits: 5, level: 'CP', semester: false, subject: 'Elective' },
-        'Comp Sci with Java Script': { code: '3904', credits: 5, level: 'CP', semester: false, subject: 'Elective' },
-        'Daily Announcements': { code: '8669', credits: 2.5, level: 'CP', semester: true, subject: 'Elective' },
-        'Entertainment & Sports Marketing': { code: '8835', credits: 2.5, level: 'CP', semester: true, subject: 'Elective' },
-        'Foundations of Engineering': { code: '5903', credits: 2.5, level: 'CP', semester: true, subject: 'Elective' },
-        'Intro. To Business': { code: '8802', credits: 2.5, level: 'CP', semester: true, subject: 'Elective' },
-        'Intro. To Marketing': { code: '8834', credits: 2.5, level: 'CP', semester: true, subject: 'Elective' },
-        'Intro. To TV/Media Broadcast': { code: '8864', credits: 2.5, level: 'CP', semester: true, subject: 'Elective' },
-        'Learning Strategies': { code: '9925', credits: 5, level: 'CP', semester: false, subject: 'Elective' },
-        'Rapid Prototyping & Mech.': { code: '5905', credits: 2.5, level: 'CP', semester: true, subject: 'Elective' },
-        'Robotics & Tech. Design': { code: '5904', credits: 2.5, level: 'CP', semester: true, subject: 'Elective' },
-        'TV/ Media Broadcast II': { code: '8865', credits: 2.5, level: 'CP', semester: true, subject: 'Elective' },
-        'TV/ Media Broadcast III': { code: '8866', credits: 5, level: 'CP', semester: false, subject: 'Elective' },
-        'Web Design': { code: '8853', credits: 2.5, level: 'CP', semester: true, subject: 'Elective' },
-        'Web Design II - Adv.': { code: '8863', credits: 2.5, level: 'CP', semester: true, subject: 'Elective' },
-        'Web Design III - Animation': { code: '8893', credits: 2.5, level: 'CP', semester: true, subject: 'Elective' },
-        'Work-Based Learning': { code: '8900', credits: 5, level: 'CP', semester: false, subject: 'Elective' },
-
-        // ===================== OTHER =====================
-        'Option: Fall': { code: '9890', credits: 0, level: 'CP', semester: false, subject: 'Other' },
-        'Option: Spring': { code: '9891', credits: 0, level: 'CP', semester: false, subject: 'Other' },
-        'SATELLITE - Adv. PM': { code: '9510', credits: 5, level: 'CP', semester: false, subject: 'Other' },
-        'SATELLITE: TECH SCHOOL': { code: '9500', credits: 5, level: 'CP', semester: false, subject: 'Other' },
-        'SATELLITE TECH SCHOOL': { code: '9510', credits: 5, level: 'CP', semester: false, subject: 'Other' }
-
-
-      // Add the rest of the catalog as you consolidate your lists
+      // ---- ENGLISH ----
+      'Adv. English 10': { code: '1412', credits: 5, level: 'ADV', semester: false, subject: 'English' },
+      'Adv. Journalism II': { code: '1833', credits: 5, level: 'CP', semester: false, subject: 'English' },
+      'Adv. Journalism III': { code: '1834', credits: 5, level: 'CP', semester: false, subject: 'English' },
+      'Adv. Journalism IV': { code: '1852', credits: 5, level: 'H', semester: false, subject: 'English' },
+      'AP English Lang/ Comp': { code: '1510', credits: 5, level: 'AP', semester: false, subject: 'English' },
+      'AP English Lit/ Comp': { code: '1610', credits: 5, level: 'AP', semester: false, subject: 'English' },
+      'Creative Writing A': { code: '1843', credits: 2.5, level: 'CP', semester: true, subject: 'English' },
+      'Creative Writing B': { code: '1853', credits: 2.5, level: 'CP', semester: true, subject: 'English' },
+      'English 9': { code: '1313', credits: 5, level: 'CP', semester: false, subject: 'English' },
+      'English 10': { code: '1413', credits: 5, level: 'CP', semester: false, subject: 'English' },
+      'English 11': { code: '1513', credits: 5, level: 'CP', semester: false, subject: 'English' },
+      'English 12 - Contemporary Fiction': { code: '1643', credits: 5, level: 'CP', semester: false, subject: 'English' },
+      'Hon. Eng. 12 - Contemp. Fiction': { code: '1641', credits: 5, level: 'H', semester: false, subject: 'English' },
+      'Honors English 11': { code: '1511', credits: 5, level: 'H', semester: false, subject: 'English' },
+      'Honors Journalism IV': { code: '1835', credits: 5, level: 'H', semester: false, subject: 'English' },
+      'Intro. To Documentary Film': { code: '2733', credits: 2.5, level: 'CP', semester: true, subject: 'English' },
+      'Journalism I': { code: '1832', credits: 2.5, level: 'CP', semester: true, subject: 'English' },
+      'Literature & Social Justice': { code: '1893', credits: 5, level: 'CP', semester: false, subject: 'English' },
+      'Public Speaking': { code: '1353', credits: 2.5, level: 'CP', semester: true, subject: 'English' },
+      'The Graphic Novel': { code: '1673', credits: 2.5, level: 'CP', semester: true, subject: 'English' },
+      'Writers Workshop A': { code: '1863', credits: 2.5, level: 'CP', semester: true, subject: 'English' },
+      'Writers Workshop B': { code: '1873', credits: 2.5, level: 'CP', semester: true, subject: 'English' },
+      // add the rest as you go
     });
 
-    // Lookup map by 4-digit code → catalog entry (+name)
     const courseCatalogByCode = (() => {
-      const map = {};
-      for (const [name, data] of Object.entries(courseCatalog)) {
-        if (data.code) map[String(data.code)] = { ...data, name };
-      }
-      return map;
+      const map = {}; for (const [name, data] of Object.entries(courseCatalog)) { if (data.code) map[String(data.code)] = { ...data, name }; } return map;
     })();
 
     const letterGrades = ['A+','A','A-','B+','B','B-','C+','C','C-','D+','D','D-','F'];
@@ -353,7 +190,15 @@
 
     let years = [];
 
-    document.addEventListener('DOMContentLoaded', () => { if (years.length===0) addYear(); updateGPA(); updateGradeInputs(); });
+    document.addEventListener('DOMContentLoaded', () => {
+      // PDF.js worker
+      if (window['pdfjsLib']) {
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.8.69/pdf.worker.min.js';
+      }
+      if (years.length === 0) addYear();
+      updateGPA();
+      updateGradeInputs();
+    });
 
     function switchTab(tab){ byId('gpa-tab').classList.toggle('active', tab==='gpa'); byId('grade-tab').classList.toggle('active', tab==='grade'); byId('gpa-content').classList.toggle('hidden', tab!=='gpa'); byId('grade-content').classList.toggle('hidden', tab!=='grade'); }
 
@@ -368,77 +213,78 @@
       if (field==='name') {
         c.name = value;
         if(courseCatalog[value]){
-          const d=courseCatalog[value];
-          c.code = d.code || '';
-          c.credits=d.credits; c.level=d.level; c.isCustom=false;
+          const d=courseCatalog[value]; c.code=d.code||''; c.credits=d.credits; c.level=d.level; c.isCustom=false;
         } else if (value.trim()!==''){ c.isCustom=true; }
       } else if (field==='letterGrade') { c.letterGrade = value; }
       else if (field==='credits') { c.credits = value; }
       else if (field==='level') { c.level = value; }
-      renderYears();
-      updateGPA();
+      renderYears(); updateGPA();
     }
 
-    function calculateGPA(courses, weighted=true){ let pts=0, cr=0; courses.forEach(c=>{ const n=(c.name||'').toLowerCase(); if(n.includes('physical education')||n.includes('health')) return; const base=(weighted?gradePoints:unweightedGradePoints)[c.letterGrade]||0; const add=weighted?(levelWeights[c.level]||0):0; pts += (base+add)*(c.credits||0); cr += (c.credits||0); }); return cr>0?(pts/cr).toFixed(3):'0.000'; }
-    function updateGPA(){ const all = years.flatMap(y=>y.courses); byId('weighted-gpa').textContent = calculateGPA(all,true); byId('unweighted-gpa').textContent = calculateGPA(all,false); }
+    function calculateGPA(courses, weighted=true){ let pts=0, cr=0; courses.forEach(c=>{ const n=(c.name||'').toLowerCase(); if(n.includes('physical education')||n.includes('health')) return; const base=(weighted?gradePoints:unweightedGradePoints)[c.letterGrade]||0; const add=weighted?(levelWeights[c.level]||0):0; pts+=(base+add)*(c.credits||0); cr+=(c.credits||0); }); return cr>0?(pts/cr).toFixed(3):'0.000'; }
+    function updateGPA(){ const all=years.flatMap(y=>y.courses); byId('weighted-gpa').textContent=calculateGPA(all,true); byId('unweighted-gpa').textContent=calculateGPA(all,false); }
 
-    // ===== Render years (no visible code column) =====
-    function renderYears(){ const container = byId('years-container'); container.innerHTML=''; years.forEach((y)=>{ const yearDiv=document.createElement('div'); yearDiv.className='card';
-      const weighted=calculateGPA(y.courses,true); const unweighted=calculateGPA(y.courses,false); const credits=y.courses.reduce((s,c)=>{ const n=(c.name||'').toLowerCase(); if(n.includes('physical education')||n.includes('health')) return s; return s+(c.credits||0); },0);
+    function renderYears(){
+      const container = byId('years-container'); container.innerHTML='';
+      years.forEach((y)=>{
+        const yearDiv=document.createElement('div'); yearDiv.className='card';
+        const weighted=calculateGPA(y.courses,true); const unweighted=calculateGPA(y.courses,false);
+        const credits=y.courses.reduce((s,c)=>{ const n=(c.name||'').toLowerCase(); if(n.includes('physical education')||n.includes('health')) return s; return s+(c.credits||0); },0);
 
-      let coursesHTML=''; y.courses.forEach(c=>{ let gOpts=''; letterGrades.forEach(g=> gOpts += `<option value="${g}" ${c.letterGrade===g?'selected':''}>${g}</option>` ); let lOpts=''; courseLevels.forEach(l=> lOpts += `<option value="${l}" ${c.level===l?'selected':''}>${l}</option>` ); coursesHTML += `
-        <div class="course-grid">
-          <div class="form-group">${createCustomDropdown(y.id,c.id,c.name)}</div>
-          <div class="form-group"><label class="form-label">Grade</label><select class="form-select" onchange="updateCourse(${y.id},${c.id},'letterGrade',this.value)">${gOpts}</select></div>
-          <div class="form-group"><label class="form-label">Credits</label><input type="number" step="0.5" value="${c.credits}" class="form-input" oninput="updateCourse(${y.id},${c.id},'credits', parseFloat(this.value)||0)"></div>
-          <div class="form-group"><label class="form-label">Level</label><select class="form-select" onchange="updateCourse(${y.id},${c.id},'level',this.value)">${lOpts}</select></div>
-          <div class="form-group" style="align-self:center;"><button class="button danger" onclick="removeCourse(${y.id},${c.id})" title="Delete Course">×</button></div>
-        </div>`; });
+        let coursesHTML='';
+        y.courses.forEach(c=>{
+          let gOpts=''; letterGrades.forEach(g=> gOpts+=`<option value="${g}" ${c.letterGrade===g?'selected':''}>${g}</option>`);
+          let lOpts=''; courseLevels.forEach(l=> lOpts+=`<option value="${l}" ${c.level===l?'selected':''}>${l}</option>`);
+          coursesHTML+=`
+            <div class="course-grid">
+              <div class="form-group">${createCustomDropdown(y.id,c.id,c.name)}</div>
+              <div class="form-group"><label class="form-label">Grade</label><select class="form-select" onchange="updateCourse(${y.id},${c.id},'letterGrade',this.value)">${gOpts}</select></div>
+              <div class="form-group"><label class="form-label">Credits</label><input type="number" step="0.5" value="${c.credits}" class="form-input" oninput="updateCourse(${y.id},${c.id},'credits', parseFloat(this.value)||0)"></div>
+              <div class="form-group"><label class="form-label">Level</label><select class="form-select" onchange="updateCourse(${y.id},${c.id},'level',this.value)">${lOpts}</select></div>
+              <div class="form-group" style="align-self:center"><button class="button danger" onclick="removeCourse(${y.id},${c.id})" title="Delete Course">×</button></div>
+            </div>`;
+        });
 
-      const removeBtn = years.length>1 ? `<button class="button danger" onclick="removeYear(${y.id})" title="Delete Year">×</button>` : '';
-      const emptyState = y.courses.length===0 ? `<div class="empty-state">No courses yet. Click \"Add Course\" below.</div>` : '';
-      const headerRow = y.courses.length>0 ? `<div class="course-header"><div>Course Name</div><div>Grade</div><div>Credits</div><div>Level</div><div></div></div>` : '';
+        const removeBtn = years.length>1 ? `<button class="button danger" onclick="removeYear(${y.id})" title="Delete Year">×</button>` : '';
+        const emptyState = y.courses.length===0 ? `<div class="empty-state">No courses yet. Click \"Add Course\" below.</div>` : '';
+        const headerRow = y.courses.length>0 ? `<div class="course-header"><div>Course Name</div><div>Grade</div><div>Credits</div><div>Level</div><div></div></div>` : '';
 
-      yearDiv.innerHTML = `
-        <div class="year-header" data-year="${y.id}" title="Drag to reorder">
-          <div class="year-info">
-            <input type="text" value="${y.name}" class="year-name" oninput="updateYearName(${y.id}, this.value)">
-            <div class="year-gpa">Weighted: ${weighted} | Unweighted: ${unweighted} | Credits: ${credits}</div>
+        // Replaced MASS with Import PDF
+        yearDiv.innerHTML = `
+          <div class="year-header" data-year="${y.id}" title="Drag to reorder">
+            <div class="year-info">
+              <input type="text" value="${y.name}" class="year-name" oninput="updateYearName(${y.id}, this.value)">
+              <div class="year-gpa">Weighted: ${weighted} | Unweighted: ${unweighted} | Credits: ${credits}</div>
+            </div>
+            <div class="year-buttons">
+              ${removeBtn}
+              <label class="button primary" for="pdf-input-${y.id}">📄 Import PDF</label>
+              <button class="button secondary" onclick="toggleDebug()">🔧 Toggle Debug</button>
+              <input type="file" id="pdf-input-${y.id}" class="hidden" accept="application/pdf" onchange="handlePDFImport(event, ${y.id})">
+            </div>
           </div>
-          <div class="year-buttons">
-            ${removeBtn}
-            <button class="button secondary" onclick="toggleMassGrade(${y.id})">✏️ Mass</button>
-          </div>
-        </div>
-        <div class="mass-grade-section hidden" id="mass-grade-${y.id}">
-          <label class="form-label">Enter grades OR paste a whole report card:</label>
-          <textarea class="mass-grade-textarea" id="mass-grades-${y.id}" placeholder="Paste report card or enter one grade per line (e.g., A\nB+\nA-)"></textarea>
-          <div style="margin-top:0.375rem; display:flex; gap:0.375rem; flex-wrap:wrap;">
-            <button class="button primary" onclick="applyMassGrades(${y.id})">Apply</button>
-            <button class="button secondary" onclick="toggleMassGrade(${y.id})">Cancel</button>
-            <button class="button success" onclick="applyMassReport(${y.id})">Parse Report Card</button>
-          </div>
-        </div>
+          <div class="courses-container">${headerRow}${coursesHTML}${emptyState}</div>
+          <div class="course-actions"><button class="button success" onclick="addCourse(${y.id})">➕ Add Course</button></div>`;
 
-        <div class="courses-container">${headerRow}${coursesHTML}${emptyState}</div>
-        <div class="course-actions"><button class="button primary" onclick="addCourse(${y.id})">➕ Add Course</button></div>`;
+        container.appendChild(yearDiv);
 
-      container.appendChild(yearDiv);
-
-      // Drag & drop on header only
-      const header = yearDiv.querySelector('.year-header');
-      header.draggable = true; header.addEventListener('dragstart', (e)=>onDragStart(e, y.id)); header.addEventListener('dragover', (e)=>onDragOver(e, y.id)); header.addEventListener('dragleave', (e)=>onDragLeave(e)); header.addEventListener('drop', (e)=>onDrop(e, y.id)); header.addEventListener('dragend', onDragEnd);
-    }); }
+        const header = yearDiv.querySelector('.year-header');
+        header.draggable = true; header.addEventListener('dragstart', (e)=>onDragStart(e, y.id)); header.addEventListener('dragover', (e)=>onDragOver(e, y.id)); header.addEventListener('dragleave', (e)=>onDragLeave(e)); header.addEventListener('drop', (e)=>onDrop(e, y.id)); header.addEventListener('dragend', onDragEnd);
+      });
+    }
 
     function updateYearName(id, name){ const y=years.find(y=>y.id===id); if(y) y.name=name; }
 
-    // ===== Custom dropdown (search by name only; code hidden from UI) =====
-    function createCustomDropdown(yearId, courseId, currentValue=''){ const dropdownId=`dropdown-${yearId}-${courseId}`; const inputId=`input-${yearId}-${courseId}`; return `
-      <div class="custom-dropdown" id="${dropdownId}">
-        <label class="form-label">Course</label>
-        <input type="text" id="${inputId}" value="${currentValue||''}" class="custom-dropdown-input" placeholder="Type to search courses..." autocomplete="off" onkeyup="filterCourses(${yearId},${courseId},this.value)" onkeydown="handleDropdownKeydown(event,${yearId},${courseId})" onfocus="showDropdown(${yearId},${courseId})" onblur="updateCourseFromInput(${yearId},${courseId},this.value); hideDropdown(${yearId},${courseId})">
-        <div class="custom-dropdown-list hidden" id="list-${yearId}-${courseId}">${generateCourseOptions(yearId,courseId,'')}</div>
-      </div>`; }
+    // ===== Custom dropdown (search by name) =====
+    function createCustomDropdown(yearId, courseId, currentValue=''){
+      const dropdownId=`dropdown-${yearId}-${courseId}`; const inputId=`input-${yearId}-${courseId}`;
+      return `
+        <div class="custom-dropdown" id="${dropdownId}">
+          <label class="form-label">Course</label>
+          <input type="text" id="${inputId}" value="${currentValue||''}" class="custom-dropdown-input" placeholder="Type to search courses..." autocomplete="off" onkeyup="filterCourses(${yearId},${courseId},this.value)" onkeydown="handleDropdownKeydown(event,${yearId},${courseId})" onfocus="showDropdown(${yearId},${courseId})" onblur="updateCourseFromInput(${yearId},${courseId},this.value); hideDropdown(${yearId},${courseId})">
+          <div class="custom-dropdown-list hidden" id="list-${yearId}-${courseId}">${generateCourseOptions(yearId,courseId,'')}</div>
+        </div>`;
+    }
 
     function generateCourseOptions(yearId, courseId, filter=''){
       const norm = (s)=> String(s||'').toLowerCase();
@@ -474,27 +320,50 @@
     function onDrop(e, targetId){ e.preventDefault(); const header=e.currentTarget; header.classList.remove('drag-over-top','drag-over-bottom'); if(draggedYearId===null || draggedYearId===targetId) return; const from = years.findIndex(y=>y.id===draggedYearId); const to = years.findIndex(y=>y.id===targetId); if(from<0||to<0) return; const rect=header.getBoundingClientRect(); let insertIndex = e.clientY < rect.top + rect.height/2 ? to : to+1; if(from < insertIndex) insertIndex--; const [m] = years.splice(from,1); years.splice(insertIndex,0,m); draggedYearId=null; renderYears(); }
     function onDragEnd(){ draggedYearId=null; Array.from(document.querySelectorAll('.year-header')).forEach(h=>h.classList.remove('drag-over-top','drag-over-bottom')); }
 
-    // ===== Mass grades (prioritize 4-digit code if present) =====
-    function toggleMassGrade(id){ const s=byId(`mass-grade-${id}`); s.classList.toggle('hidden'); if(!s.classList.contains('hidden')) byId(`mass-grades-${id}`).value=''; }
-    function applyMassGrades(id){
-      const y = years.find(y=>y.id===id); if(!y) return;
-      const text = byId(`mass-grades-${id}`).value.trim();
-      if(!text) return;
-      const grades = text.split('\n').map(g=>g.trim().toUpperCase()).filter(Boolean);
-      grades.forEach((g,i)=>{ if(i<y.courses.length && letterGrades.includes(g)) y.courses[i].letterGrade=g; });
-      toggleMassGrade(id);
-      renderYears();
-      updateGPA();
+    // ===== PDF Import =====
+    function toggleDebug(){ byId('debug-card').classList.toggle('hidden'); }
+
+    async function handlePDFImport(event, yearId){
+      const file = event.target.files && event.target.files[0];
+      if(!file){ return; }
+      const arrayBuffer = await file.arrayBuffer();
+      const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+      let fullText = '';
+      for(let p=1;p<=pdf.numPages;p++){
+        const page = await pdf.getPage(p);
+        const content = await page.getTextContent();
+        const strings = content.items.map(i=>('str' in i ? i.str : i) || '');
+        // Join with spaces, then restore some line breaks based on obvious headings
+        let pageText = strings.join(' ').replace(/\s+/g,' ').trim();
+        // Heuristic: split after course rows by looking for credit totals like "7.000" or a trailing letter grade
+        pageText = pageText
+          .replace(/(A\+|A-|\bA\b|B\+|B-|\bB\b|C\+|C-|\bC\b|D\+|D-|\bD\b|\bF\b)\s+(?=\d|[A-Z])/g, '$1\n')
+          .replace(/(\d{4}-\d+)\s+/g, '$1 ');
+        fullText += (p>1?'\n':'') + pageText;
+      }
+      // Show debug
+      const dbg = byId('pdf-debug'); if (dbg){ dbg.textContent = fullText; byId('debug-card').classList.remove('hidden'); }
+
+      // Parse and apply
+      const parsed = parseReportCard(fullText);
+      if(!parsed.length){ alert('No courses found in the PDF text. Toggle Debug to inspect what was extracted.'); return; }
+      const y = years.find(y=>y.id===yearId); if(!y) return;
+      parsed.forEach(p=>{
+        y.courses.push({ id: Date.now()+Math.random(), code: p.code||'', name: p.name, letterGrade: p.letterGrade, credits: p.credits, level: p.level, isCustom: !courseCatalog[p.name] });
+      });
+      renderYears(); updateGPA();
+      // reset the input so you can pick the same file again if needed
+      event.target.value = '';
     }
 
     function inferLevelFromName(name){
-      const n = name.toLowerCase();
+      const n = (name||'').toLowerCase();
       if (n.includes('ap ') || n.startsWith('ap')) return 'AP';
       if (n.includes('honors') || n.startsWith('hon ') || n.includes(' hon ')) return 'H';
       if (n.includes('adv') && !n.includes('advertis')) return 'ADV';
       return 'CP';
     }
-    function cleanCourseName(raw){ return raw.replace(/\s+/g,' ').replace(/\u00A0/g,' ').trim().replace(/\s{2,}/g,' '); }
+    function cleanCourseName(raw){ return String(raw||'').replace(/\s+/g,' ').replace(/\u00A0/g,' ').trim().replace(/\s{2,}/g,' '); }
     function findBestCatalogMatch(name){
       if(courseCatalog[name]) return name;
       const target = name.replace(/[^a-z0-9 ]/ig,'').toLowerCase();
@@ -511,23 +380,30 @@
     }
 
     function parseReportCard(text){
-      const lines = text.split(/\n+/).map(l=>l.trim()).filter(Boolean);
+      // Normalize newlines to increase hit-rate on messy PDFs
+      const rough = text
+        .replace(/\r/g,'\n')
+        .replace(/\n{2,}/g,'\n')
+        .replace(/\s{2,}/g,' ');
+
+      const lines = rough.split(/\n+/).map(l=>l.trim()).filter(Boolean);
       const results = [];
       for (const line of lines){
-        // Prefer a 4-digit code with optional section (e.g., 5730-1)
+        // must contain a 4-digit code OR look like a subject line with a trailing letter grade
         const codeMatch = line.match(/\b(\d{4})(?:-\d+)?\b/);
         const foundCode = codeMatch ? codeMatch[1] : null;
 
-        // Course name appears before the code if present
+        // Find a trailing letter grade (final grade); pick the last match on the line
+        const gradeRegex = /A\+|A-|\bA\b|B\+|B-|\bB\b|C\+|C-|\bC\b|D\+|D-|\bD\b|F\b/g;
+        const gradeMatches = [...line.matchAll(gradeRegex)].map(m=>m[0]);
+        const finalGrade = gradeMatches.length ? gradeMatches[gradeMatches.length-1] : null;
+        if (!finalGrade && !foundCode) continue; // skip headers and noise
+
+        // Course name = text before the code (common case) otherwise the whole line minus tail tokens
         let namePart = line;
         if (codeMatch) namePart = line.slice(0, line.indexOf(codeMatch[0])).trim();
 
-        // Final letter grade = last letter token on the line
-        const gradeRegex = /A\+|A-|A\b|B\+|B-|B\b|C\+|C-|C\b|D\+|D-|D\b|F\b/g;
-        const gradeMatches = [...line.matchAll(gradeRegex)].map(m=>m[0]);
-        const finalGrade = gradeMatches.length ? gradeMatches[gradeMatches.length-1] : null;
-
-        // Credits = first decimal number (works for "7.00014.0": captures 7.000)
+        // Credits: first decimal number like 7.000; if none, will be filled from catalog default
         let credits = null;
         const creditMatches = [...line.matchAll(/(\d+\.(?:\d{1,3}))/g)].map(m=>parseFloat(m[1]));
         if (creditMatches.length) credits = creditMatches[0];
@@ -544,37 +420,16 @@
         }
 
         if (courseName && finalGrade){
-          const code = courseCatalog[courseName]?.code || foundCode || '';
+          const code = (courseCatalog[courseName]?.code) || foundCode || '';
           results.push({ code, name: courseName, letterGrade: finalGrade, credits: credits || 5, level });
         }
       }
-      // De-dupe by name|grade
+      // de-dupe by name|grade
       const seen = new Set();
       return results.filter(r=>{ const k=r.name+'|'+r.letterGrade; if (seen.has(k)) return false; seen.add(k); return true; });
     }
 
-    function applyMassReport(yearId){
-      const y = years.find(y=>y.id===yearId); if(!y) return;
-      const text = byId(`mass-grades-${yearId}`).value || '';
-      const parsed = parseReportCard(text);
-      if (!parsed.length){ alert('No courses found in the pasted report.'); return; }
-      parsed.forEach(p=>{
-        y.courses.push({
-          id: Date.now()+Math.random(),
-          code: p.code || '', // kept internally
-          name: p.name,
-          letterGrade: p.letterGrade,
-          credits: p.credits,
-          level: p.level,
-          isCustom: !courseCatalog[p.name]
-        });
-      });
-      toggleMassGrade(yearId);
-      renderYears();
-      updateGPA();
-    }
-
-    // ===== Export / Import =====
+    // ===== Export / Import (JSON) =====
     function exportData(){ const data={ years, exportDate:new Date().toISOString() }; const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='gpa-data.json'; a.click(); URL.revokeObjectURL(url); }
     function importData(event){ const file=event.target.files[0]; if(!file) return; const r=new FileReader(); r.onload=e=>{ try{ const data=JSON.parse(e.target.result); if(Array.isArray(data.years)){ years=data.years; renderYears(); updateGPA(); } } catch(err){ alert('Error importing data. Please check the file format.'); } }; r.readAsText(file); }
 
@@ -586,8 +441,6 @@
 
     // ===== Utils =====
     function byId(id){ return document.getElementById(id); }
-
-    // Close dropdowns when clicking outside
     document.addEventListener('click', (event)=>{ const dropdowns=document.querySelectorAll('.custom-dropdown-list'); dropdowns.forEach(dd=>{ if(!dd.parentElement.contains(event.target)) dd.classList.add('hidden'); }); });
   </script>
 </body>
